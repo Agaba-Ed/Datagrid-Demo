@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>EasyUI Datagrid</title>
+    <link rel="stylesheet" type="text/css" href="https://www.jeasyui.com/easyui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="https://www.jeasyui.com/easyui/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="https://www.jeasyui.com/easyui/themes/color.css">
+    <link rel="stylesheet" type="text/css" href="https://www.jeasyui.com/easyui/demo/demo.css">
+    <script type="text/javascript" src="https://www.jeasyui.com/easyui/jquery.min.js"></script>
+    <script type="text/javascript" src="https://www.jeasyui.com/easyui/jquery.easyui.min.js"></script>
+</head>
+<body>
+  <table id="dg" title="Item Sales Report" class="easyui-datagrid" style="width:700px;height:250px"
+          url="get_items.php"
+          toolbar="#tb,#toolbar" pagination="true"
+          rownumbers="true" fitColumns="true" singleSelect="true">
+  </table>
+
+   <form  method="post" id="tb" style="padding:5px 0;" url="search.php">
+        <span> Date from:<input name="dateFrom" class="easyui-datetimebox" style="width:100px;"></span>
+        <span> To:<input name="dateTo" class="easyui-datetimebox" style="width:100px;"></span>
+        <a href="#" class="easyui-linkbutton" data-options="prompt:'Search'" onClick="search()" style="width:80px">Search</a>
+        <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-print'" style="width:80px">Print</a>
+    </form>
+    <div id="toolbar">
+         <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="editItem()">View/Update</a>
+         <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newItem()">New Item</a>
+         <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="destroyItem()">Delete</a>
+         <span> Search:<input/></span>
+     </div>
+</body>
+</html>
