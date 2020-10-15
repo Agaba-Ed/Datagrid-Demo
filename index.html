@@ -42,7 +42,7 @@
   </table>
 
 
-   <form  method="post" id="tb" style="padding:5px 0;" url="search.php">
+   <form  method="post" id="tb" style="padding:5px 0;" url="">
         <span> Date from:<input name="dateFrom" class="easyui-datetimebox" style="width:100px;"></span>
         <span> To:<input name="dateTo" class="easyui-datetimebox" style="width:100px;"></span>
         <a href="#" class="easyui-linkbutton" data-options="prompt:'Search'" onClick="search()" style="width:80px">Search</a>
@@ -57,7 +57,7 @@
 <script type="text/javascript">
 		var url;
 		function newItem(){
-			$('#dlg').dialog('open').dialog('center').dialog('setTitle','New User');
+			$('#dlg').dialog('open').dialog('center').dialog('setTitle','New Item');
 			$('#fm').form('clear');
 			url = '';
 		}
