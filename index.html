@@ -15,7 +15,32 @@
           url="get_items.php"
           toolbar="#tb,#toolbar" pagination="true"
           rownumbers="true" fitColumns="true" singleSelect="true">
+      <thead>
+          <tr>
+             <th field="date" width="50">Date</th>
+             <th field="rct" width="50">Rct</th>
+             <th field="description" width="50">Description</th>
+             <th field="quantity" width="50">Quantity</th>
+             <th field="unitprice" width="50">Unit Price</th>
+             <th field="total" width="50">Total Amount</th>
+             <th field="vat" width="50">Vat(18%)</th>
+         </tr>
+       </thead>
   </table>
+  <table id="dg" url="get_update_details.php" class="easyui-datagrid" style="width:700px;height:250px"
+          pagination="true"
+          rownumbers="true" fitColumns="true" singleSelect="true">
+
+      <thead>
+          <tr>
+              <th field="itemname" width="50">Item Name</th>
+              <th field="updatedquantity" width="50">Updated Quantity</th>
+              <th field="updatedstatus" width="50">Updated Status</th>
+              <th field="updateddate" width="50">Updated Date</th>
+          </tr>
+      </thead>
+  </table>
+
 
    <form  method="post" id="tb" style="padding:5px 0;" url="search.php">
         <span> Date from:<input name="dateFrom" class="easyui-datetimebox" style="width:100px;"></span>
@@ -29,5 +54,84 @@
          <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="destroyItem()">Delete</a>
          <span> Search:<input/></span>
      </div>
+     <form  method="post" id="tb" style="padding:5px 0;" url="search.php">
+        <span> Date from:<input name="dateFrom" class="easyui-datetimebox" style="width:100px;"></span>
+        <span> To:<input name="dateTo" class="easyui-datetimebox" style="width:100px;"></span>
+        <a href="#" class="easyui-linkbutton" data-options="prompt:'Search'" onClick="search()" style="width:80px">Search</a>
+        <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-print'" style="width:80px">Print</a>
+    </form>
+    <div id="dlg" class="easyui-dialog" style="width:400px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons'">
+        <form id="fm" method="post"  style="margin:0;padding:20px 50px">
+            <h3>Item Information</h3>
+            <div style="margin-bottom:10px">
+                <input name="rct" class="easyui-textbox" required="true" label="Rct:" style="width:100%">
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="description" class="easyui-textbox" required="true" label="Description:" style="width:100%">
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="quantity" class="easyui-textbox" required="true" label="Quantity" style="width:100%">
+            </div>
+            <div style="margin-bottom:10px">
+                <input name="unitprice" class="easyui-textbox" required="true" label="Unit Price:" style="width:100%">
+            </div>
+
+        </form>
+    </div>
+    <div id="dlg-buttons">
+        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveItem()" style="width:90px">Save</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
+    </div>
+    <script type="text/javascript">
+        var url;
+        function newItem(){
+            $('#dlg').dialog('open').dialog('center').dialog('setTitle','New Item');
+            $('#fm').form('clear');
+        }
+        function editItem(){
+            var row = $('#dg').datagrid('getSelected');
+            if (row){
+                $('#dlg').dialog('open').dialog('center').dialog('setTitle','Edit Item');
+                $('#fm').form('load',row);
+                url = 'update_item.php?id='+row.id;
+            }
+        }
+        function saveItem(){
+            $('#fm').form('submit',{
+   url: url,
+   onSubmit: function(){
+    return $(this).form('validate');
+   },
+   success: function(response){
+    var respData = $.parseJSON(response);
+    if(respData.status == 0){
+     $.messager.show({
+      title: 'Error',
+      msg: respData.msg
+     });
+    }else{
+     $('#dlg').dialog('close');
+     $('#dg').datagrid('reload');
+    }
+   }
+  });
+        }
+        function search(){
+            $('#tb').submit();
+            $('#dg').datagrid('reload');    // reload the user
+        }
+        function destroyItem(){
+            var row = $('#dg').datagrid('getSelected');
+            $.post("destroy_item.php",{id:row.id},function(data) {
+                            $('#dg').datagrid('reload');
+                            });
+
+        }
+        function doSearch(){
+                  $('#tt').datagrid('load',{
+                  itemid: $('#itemid').val(),
+                  productid: $('#productid').val()
+    });
+}
 </body>
 </html>
