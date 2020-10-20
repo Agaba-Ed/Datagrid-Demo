@@ -11,8 +11,8 @@
     <script type="text/javascript" src="https://www.jeasyui.com/easyui/jquery.easyui.min.js"></script>
 </head>
 <body>
-  <table id="dg" title="Item Sales Report" class="easyui-datagrid" style="width:700px;height:250px"
-          toolbar="#tb,#toolbar" pagination="true"
+  <table id="dg" title="Item Sales Report" class="easyui-datagrid" style="width:700px;height:480px"
+          toolbar="#tb,#toolbar" url="getAll" pagination="true"
           rownumbers="true" fitColumns="true" singleSelect="true">
       <thead>
           <tr>
@@ -20,8 +20,8 @@
              <th field="rct" width="50">Rct</th>
              <th field="description" width="50">Description</th>
              <th field="quantity" width="50">Quantity</th>
-             <th field="unitprice" width="50">Unit Price</th>
-             <th field="total" width="50">Total Amount</th>
+             <th field="unit_price" width="50">Unit Price</th>
+             <th field="total_amount" width="50">Total Amount</th>
              <th field="vat" width="50">Vat(18%)</th>
          </tr>
        </thead>
@@ -93,7 +93,7 @@
 			if (row){
 				$.messager.confirm('Confirm','Are you sure you want to destroy this user?',function(r){
 					if (r){
-						$.post('',{id:row.id},function(result){
+						$.post('sales',{id:row.id},function(result){
 							if (result.success){
 								$('#dg').datagrid('reload');	// reload the user data
 							} else {
