@@ -39,7 +39,24 @@
           </tr>
       </thead>
   </table>
+  <div id="dlg" class="easyui-dialog" style="width:400px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons'">
+	<form id="fm" method="post"  style="margin:0;padding:20px 50px">
+		<h3>Item Information</h3>
+		<div style="margin-bottom:10px">
+			<input name="rct" class="easyui-textbox" required="true" label="Rct:" style="width:100%">
+		</div>
+		<div style="margin-bottom:10px">
+			<input name="description" class="easyui-textbox" required="true" label="Description:" style="width:100%">
+		</div>
+		<div style="margin-bottom:10px">
+			<input name="quantity" class="easyui-textbox" required="true" label="Quantity" style="width:100%">
+		</div>
+		<div style="margin-bottom:10px">
+			<input name="unitprice" class="easyui-textbox" required="true" label="Unit Price:" style="width:100%">
+		</div>
 
+	</form>
+</div>
 
    <form  method="post" id="tb" style="padding:5px 0;" url="">
         <span> Date from:<input name="dateFrom" class="easyui-datetimebox" style="width:100px;"></span>
@@ -54,6 +71,7 @@
          <span> Search:<input/></span>
      </div>
 <script type="text/javascript">
+$(function(){
 		var url;
 		function newItem(){
 			$('#dlg').dialog('open').dialog('center').dialog('setTitle','New Item');
@@ -107,6 +125,7 @@
 				});
 			}
 		}
+	});
 	</script>
 </body>
 </html>
