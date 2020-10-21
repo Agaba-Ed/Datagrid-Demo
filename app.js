@@ -38,6 +38,15 @@ app.post("/sales/sale/", (req, res) => {
 
 app.post("/getAll", (req, res) => {
     Sale.getAll((err, data) => {
+        var total = 0;
+        var vatTotal = 0;
+        data.forEach(element => {
+            var el = element.total_amount;
+            var vat = element.vat;
+            total += el;
+            vatTotal += vat;
+        });
+        data.push({quantity: "total", total_amount: total, vat: vatTotal})
         res.send(data);
     });
 });
