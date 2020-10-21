@@ -58,6 +58,10 @@
 	</form>
 </div>
 
+	<div id="dlg-buttons">
+		<a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveItem()" style="width:90px">Save</a>
+		<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
+	</div>
    <form  method="post" id="tb" style="padding:5px 0;" url="">
         <span> Date from:<input name="dateFrom" class="easyui-datetimebox" style="width:100px;"></span>
         <span> To:<input name="dateTo" class="easyui-datetimebox" style="width:100px;"></span>
@@ -71,7 +75,6 @@
          <span> Search:<input/></span>
      </div>
 <script type="text/javascript">
-$(function(){
 		var url;
 		function newItem(){
 			$('#dlg').dialog('open').dialog('center').dialog('setTitle','New Item');
@@ -88,7 +91,7 @@ $(function(){
 		}
 		function saveItem(){
 			$('#fm').form('submit',{
-				url: url,
+				url: "create",
 				onSubmit: function(){
 					return $(this).form('validate');
 				},
@@ -125,7 +128,6 @@ $(function(){
 				});
 			}
 		}
-	});
 	</script>
 </body>
 </html>

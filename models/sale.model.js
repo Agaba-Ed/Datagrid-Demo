@@ -1,20 +1,27 @@
 const sql = require('./db.js');
+const dateformat = require('dateformat');
 
-const Sale = function(sale){
-    this.date = sale.date;
-    this.rct = sale.rct;
-    this.description = sale.description;
-    this.quantity = sale.quantity;
-    this.unit_price = sale.total_amount;
-    this.vat = sale.vat;
+create = (reqBody, result) => {
+    var date = dateformat(new Date, "yyyy-mm-dd");
+    var rct = reqBody.rct;
+    var description = reqBody.description;
+    var quantity = reqBody.quantity;
+    var unit_price = reqBody.unitprice;
+    var total = quantity * unit_price;
+    var vat = total * 0.18;
+    sql.query("INSERT INTO sales_table set date = ?, rct = ?, description = ?, quantity = ?, unit_price = ?, total_amount = ?, vat = ?", 
+        [date, rct, description, quantity, unit_price, total, vat]
+    , (err, res) => {
+        if(err){
+            console.log(err);
+            result(err, null);
+            return;
+        }
+        result(null, {id: res.insertId});
+    });
 };
 
-
-Sale.create = {
-
-};
-
-Sale.getAll = result =>{
+getAll = result =>{
     sql.query("SELECT * FROM sales_table", (err, res) => {
         if(err){
             console.log("error: ", err);
@@ -25,7 +32,7 @@ Sale.getAll = result =>{
     });
 };
 
-Sale.deleteOne = (id, result) => {
+deleteOne = (id, result) => {
     sql.query("DELETE FROM sales_table where id = ?", id, (err, res) => {
         if(err){
             console.log("error: ", err);
@@ -41,4 +48,4 @@ Sale.deleteOne = (id, result) => {
     });
 };
 
-module.exports = Sale;
+module.exports = {create, getAll, deleteOne};
