@@ -27,6 +27,15 @@ app.post("/create", (req, res) => {
     });
 });
 
+app.post("/sales/sale/", (req, res) => {
+    Sale.update(req.body, req.query.id, (err, data) => {
+        if(err){
+            res.send({errorMsg: "Failed!"});
+        }
+        res.send({message: "Success."});
+    });
+});
+
 app.post("/getAll", (req, res) => {
     Sale.getAll((err, data) => {
         res.send(data);

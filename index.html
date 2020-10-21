@@ -79,19 +79,19 @@
 		function newItem(){
 			$('#dlg').dialog('open').dialog('center').dialog('setTitle','New Item');
 			$('#fm').form('clear');
-			url = '';
+			url = 'create';
 		}
 		function editItem(){
 			var row = $('#dg').datagrid('getSelected');
 			if (row){
 				$('#dlg').dialog('open').dialog('center').dialog('setTitle','Edit User');
 				$('#fm').form('load',row);
-				url = '?id='+row.id;
+				url = 'sales/sale?id='+row.id;
 			}
 		}
 		function saveItem(){
 			$('#fm').form('submit',{
-				url: "create",
+				url: url,
 				onSubmit: function(){
 					return $(this).form('validate');
 				},

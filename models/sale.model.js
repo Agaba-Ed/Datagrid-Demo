@@ -48,4 +48,22 @@ deleteOne = (id, result) => {
     });
 };
 
-module.exports = {create, getAll, deleteOne};
+update = (reqBody, id, result) => {
+    var date = dateformat(new Date, "yyyy-mm-dd");
+    var rct = reqBody.rct;
+    var description = reqBody.description;
+    var quantity = reqBody.quantity;
+    var unit_price = reqBody.unitprice;
+    var total = quantity * unit_price;
+    var vat = total * 0.18;
+    sql.query("UPDATE sales_table set date = ?, rct = ?, description = ?, quantity = ?, unit_price = ?, total_amount = ?, vat = ? WHERE id = ?", 
+    [date, rct, description, quantity, unit_price, total, vat, id], (err, res) => {
+        if(err){
+            result(err, null);
+            console.log(err);
+        }
+        result(null, res);
+    });
+};
+
+module.exports = {create, getAll, deleteOne, update};
