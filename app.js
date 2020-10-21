@@ -11,6 +11,31 @@ app.get("/", (req, res) =>{
     res.sendFile(path.join(__dirname+ '/index.html'));
 });
 
+app.post("/create", (req, res) => {
+    if(!req.body){
+        res.status(400).send({
+            message : "Content cannot be empty!"
+        });
+    }
+
+    Sale.create(req.body, (err, data) => {
+        if(err){
+            res.send({errorMsg: "Failed!"});
+        }else{
+            res.send({message: "Success."});
+        }
+    });
+});
+
+app.post("/sales/sale/", (req, res) => {
+    Sale.update(req.body, req.query.id, (err, data) => {
+        if(err){
+            res.send({errorMsg: "Failed!"});
+        }
+        res.send({message: "Success."});
+    });
+});
+
 app.post("/getAll", (req, res) => {
     Sale.getAll((err, data) => {
         res.send(data);
