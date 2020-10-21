@@ -32,6 +32,16 @@ getAll = result =>{
     });
 };
 
+getUpdatesTable = result =>{
+    sql.query("SELECT * FROM updates_table", (err, res) => {
+        if(err){
+            console.log("error: ", err);
+            result(err, null);
+            return;
+        }
+        result(null, res);
+    });
+};
 deleteOne = (id, result) => {
     sql.query("DELETE FROM sales_table where id = ?", id, (err, res) => {
         if(err){
@@ -60,10 +70,9 @@ update = (reqBody, id, result) => {
     [date, rct, description, quantity, unit_price, total, vat, id], (err, res) => {
         if(err){
             result(err, null);
-            console.log(err);
         }
         result(null, res);
     });
 };
 
-module.exports = {create, getAll, deleteOne, update};
+module.exports = {create, getAll, deleteOne, update, getUpdatesTable};

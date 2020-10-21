@@ -42,6 +42,12 @@ app.post("/getAll", (req, res) => {
     });
 });
 
+app.post("/tableTwo", (req, res) => {
+    Sale.getUpdatesTable((err, data) =>{
+        res.send(data);
+    });
+});
+
 app.post("/sales", (req, res) => {
     Sale.deleteOne(req.body.id, (err, data) => {
         if(err){
