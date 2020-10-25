@@ -1,78 +1,102 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
-const Sale = require('./models/sale.model.js');
+const mysql=require('mysql');
+const dbConfig = require('./config/db.config.js');
 
-const app = express();
+//Creating connection
+var con = mysql.createConnection({
+    host: dbConfig.HOST,
+    user: dbConfig.USER,
+    password: dbConfig.PASSWORD,
+    database: dbConfig.DB
+});
 
+//Obtaining database connection
+con.connect(err =>{
+    if(err) throw err;
+    console.log("Succesfully connected");
+});
+
+const app=express();
 app.use(bodyParser.urlencoded({extended: true}));
 
 app.get("/", (req, res) =>{
     res.sendFile(path.join(__dirname+ '/index.html'));
 });
 
-app.post("/create", (req, res) => {
-    if(!req.body){
-        res.status(400).send({
-            message : "Content cannot be empty!"
-        });
+
+//Creating new item..
+app.post('/create',(req,res)=>{
+    let sql='INSERT INTO sales_table SET ?';
+    con.query(sql,req.body,(err,result)=>{
+        if(err) throw err;
+        console.log("Item added successfully..");
+        res.send(result);
     }
 
-    Sale.create(req.body, (err, data) => {
-        if(err){
-            res.send({errorMsg: "Failed!"});
-        }else{
-            res.send({message: "Success."});
-        }
+    );
+});
+
+//Updating sales table
+app.post('/sales/sale/',(req,res)=>{
+    var row=req.body;
+    var id=req.query.id;
+    let sql='UPDATE sales_table SET ? WHERE id=?';
+    con.query(sql,[row,id],(err,result)=>{
+        if(err) throw err;
+        console.log("Item updated successfully..");
+        res.send(result);
+    }
+
+    );
+});
+
+//Getting all table data
+app.post('/getAll',(req,res)=>{
+    var sql='SELECT * FROM sales_table';
+    con.query(sql,(err,result)=>{
+        if(err) throw err;
+         console.log("Table 1 data selected..");
+         var total = 0;
+         var vatTotal = 0;
+         result.forEach(element => {
+             var el = element.total_amount;
+             var vat = element.vat;
+             total += el;
+             vatTotal += vat;
+         });
+         result.push({quantity: "total", total_amount: total, vat: vatTotal});
+         res.send(result);
     });
 });
 
-app.post("/sales/sale/", (req, res) => {
-    Sale.update(req.body, req.query.id, (err, data) => {
-        if(err){
-            res.send({errorMsg: "Failed!"});
-        }
-        res.send({message: "Success."});
-    });
-});
-
-app.post("/getAll", (req, res) => {
-    Sale.getAll((err, data) => {
-        var total = 0;
-        var vatTotal = 0;
-        data.forEach(element => {
-            var el = element.total_amount;
-            var vat = element.vat;
-            total += el;
-            vatTotal += vat;
-        });
-        data.push({quantity: "total", total_amount: total, vat: vatTotal})
-        res.send(data);
-    });
-});
 
 app.post("/tableTwo", (req, res) => {
-    Sale.getUpdatesTable((err, data) =>{
-        res.send(data);
-    });
+    let sql='SELECT * FROM updates_table';
+    con.query(sql,(err,result)=>{
+        if(err) throw err;
+        console.log("Table 2 data selected..");
+        res.send(result);
+    }
+
+    );
 });
 
+//Deleting item 
 app.post("/sales", (req, res) => {
-    Sale.deleteOne(req.body.id, (err, data) => {
-        if(err){
-            if(err.kind === "not_found"){
-                res.status(404).send({errorMsg: "Not found."});
-            }else{
-                res.status(500).send({
-                    errorMsg: "Could not delete"
-                });
-            } 
-        }else{
-            res.send({success: true});
-        }
-    });
+    let sql='DELETE FROM sales_table WHERE id=?';
+    con.query(sql,req.body.id,(err,result)=>{
+        if(err) throw err;
+        console.log("Item deleted successfully...");
+        res.send(result);
+    }
+
+    );
 });
 
+
+//Server connection...
 app.listen(3000, () =>{
     console.log("Server is running on port 3000");
 });
