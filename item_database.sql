@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 15, 2020 at 04:38 PM
+-- Generation Time: Oct 25, 2020 at 03:41 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.2.27
 
@@ -44,20 +44,16 @@ CREATE TABLE `sales_table` (
 --
 
 INSERT INTO `sales_table` (`id`, `date`, `rct`, `description`, `quantity`, `unit_price`, `total_amount`, `vat`) VALUES
-(3, '2020-09-28', 5, 'yes', 5, 5000, 25000, 4500),
-(4, '2020-09-28', 0, '', 4, 0, 0, 0),
-(5, '2020-09-28', 0, '', 0, 0, 0, 0),
-(6, '2020-09-28', 0, '', 0, 0, 0, 0),
-(7, '2020-09-28', 10, 'dyhvgbh', 50, 2000, 100000, 18000),
-(8, '2020-09-28', 0, '', 0, 0, 0, 0),
-(10, '2020-09-29', 0, '', 0, 0, 0, 0),
-(11, '2020-09-30', 0, '', 0, 0, 0, 0),
-(12, '2020-09-30', 2, 'ghfh', 4, 54000, 216000, 38880),
-(13, '2020-09-30', 4, 'fgh', 4, 2500, 10000, 1800);
+(22, '2020-10-25', 4, 'test', 54, 4515, 243810, 43886);
 
 --
 -- Triggers `sales_table`
 --
+DELIMITER $$
+CREATE TRIGGER `after_sales_insert` BEFORE INSERT ON `sales_table` FOR EACH ROW SET new.total_amount=new.unit_price*new.quantity,
+new.vat=new.unit_price*new.quantity*0.18
+$$
+DELIMITER ;
 DELIMITER $$
 CREATE TRIGGER `after_sales_update` AFTER UPDATE ON `sales_table` FOR EACH ROW BEGIN
         INSERT INTO updates_table(item_name,updated_quantity,updated_status,updated_date)
@@ -85,13 +81,6 @@ CREATE TABLE `updates_table` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `updates_table`
---
-
-INSERT INTO `updates_table` (`id`, `item_name`, `updated_quantity`, `updated_status`, `updated_date`) VALUES
-(1, '', 4, 'Updated', '2020-09-29');
-
---
 -- Indexes for dumped tables
 --
 
@@ -117,13 +106,13 @@ ALTER TABLE `updates_table`
 -- AUTO_INCREMENT for table `sales_table`
 --
 ALTER TABLE `sales_table`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `updates_table`
 --
 ALTER TABLE `updates_table`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
