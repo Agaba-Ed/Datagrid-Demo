@@ -3,4 +3,5 @@ module.exports = {
     USER: '',
     PASSWORD: '',
     DB: ''
+    
 };
