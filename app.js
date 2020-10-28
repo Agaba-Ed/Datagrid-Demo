@@ -55,7 +55,6 @@ app.post('/sales/sale/',(req,res)=>{
 //Getting all table data
 app.post('/getAll',(req,res)=>{
     if(req.body.startdate){
-        console.log(req.body)
         var date_from = req.body.startdate;
         var date_to = req.body.enddate;
         var sql='SELECT * FROM sales_table WHERE date BETWEEN ? and ?';
