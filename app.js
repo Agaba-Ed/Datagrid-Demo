@@ -54,21 +54,32 @@ app.post('/sales/sale/',(req,res)=>{
 
 //Getting all table data
 app.post('/getAll',(req,res)=>{
-    var sql='SELECT * FROM sales_table';
-    con.query(sql,(err,result)=>{
+    if(req.body.startdate){
+        var date_from = req.body.startdate;
+        var date_to = req.body.enddate;
+        var sql='SELECT * FROM sales_table WHERE date BETWEEN ? and ?';
+        con.query(sql, [date_from, date_to], (err,result)=>{
         if(err) throw err;
-         console.log("Table 1 data selected..");
-         var total = 0;
-         var vatTotal = 0;
-         result.forEach(element => {
-             var el = element.total_amount;
-             var vat = element.vat;
-             total += el;
-             vatTotal += vat;
-         });
-         result.push({quantity: "total", total_amount: total, vat: vatTotal});
-         res.send(result);
-    });
+        console.log("Date range data selected...");
+        res.send(result);
+        });
+    }else{
+        var sql ='SELECT * FROM sales_table';
+        con.query(sql,(err,result)=>{
+            if(err) throw err;
+            console.log("Table 1 data selected..");
+            var total = 0;
+            var vatTotal = 0;
+            result.forEach(element => {
+                var el = element.total_amount;
+                var vat = element.vat;
+                total += el;
+                vatTotal += vat;
+            });
+            result.push({quantity: "total", total_amount: total, vat: vatTotal});
+            res.send(result);
+        });
+    }
 });
 
 
@@ -94,7 +105,6 @@ app.post("/sales", (req, res) => {
 
     );
 });
-
 
 //Server connection...
 app.listen(3000, () =>{
