@@ -53,6 +53,7 @@ app.post('/sales/sale/',(req,res)=>{
 });
 
 //Getting all table data
+//Searching if request has body
 app.post('/getAll',(req,res)=>{
     if(req.body.startdate){
         var date_from = req.body.startdate;
