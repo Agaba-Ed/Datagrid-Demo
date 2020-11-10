@@ -60,7 +60,7 @@ app.post('/getAll',(req,res)=>{
     if(req.body.startdate || req.body.description){
         var date_from = req.body.startdate;
         var date_to = req.body.enddate;
-        var description = req.body.description;
+        var description = req.body.description+'%';
         if(description === ''){
             sql = 'SELECT * FROM sales_table WHERE date BETWEEN ? AND ?';
             queryArray = [date_from, date_to];
