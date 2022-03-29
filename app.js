@@ -3,7 +3,6 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const mysql=require('mysql');
 const dbConfig = require('./config/db.config.js');
-const express = require('express');
 
 //Creating connection
 var con = mysql.createConnection({
@@ -56,21 +55,11 @@ app.post('/sales/sale/',(req,res)=>{
 //Getting all table data
 //Searching if request has body
 app.post('/getAll',(req,res)=>{
-    var sql;
-    var queryArray;
-    if(req.body.startdate || req.body.description){
+    if(req.body.startdate){
         var date_from = req.body.startdate;
         var date_to = req.body.enddate;
-        var description = req.body.description;
-        if(description === ''){
-            sql = 'SELECT * FROM sales_table WHERE date BETWEEN ? AND ?';
-            queryArray = [date_from, date_to];
-        }else{
-            sql = date_from === ''? 'SELECT * FROM sales_table WHERE DESCRIPTION LIKE ?':
-                                    'SELECT * FROM sales_table WHERE DESCRIPTION LIKE ? AND date BETWEEN ? AND ?';
-            queryArray = [description, date_from, date_to];
-        }
-        con.query(sql, queryArray, (err,result)=>{
+        var sql='SELECT * FROM sales_table WHERE date BETWEEN ? and ?';
+        con.query(sql, [date_from, date_to], (err,result)=>{
         if(err) throw err;
         console.log("Date range data selected...");
         res.send(result);
